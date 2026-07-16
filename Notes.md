@@ -1,0 +1,5 @@
+# DOCUMENTATIONAL FLOW OF RAG CHATBOT SERVICE
+1. http://localhost:8000/docs is fastAPI's auto generated interactive API docs , can be used to test endpoints. Also 8000 is Uvicorn's default port.
+2. uvicorn — the actual web server program. FastAPI itself doesn't run anything — it just defines what happens when a request comes in. Uvicorn is the ASGI server that actually listens on a port, accepts HTTP connections, and hands each request over to your FastAPI app. --reload — watches your files for changes and automatically restarts the server when you save. in uvicorn app.main:app --reload.
+3. BaseSettings is a special version of a Pydantic model that, in addition to normal validation, knows how to pull its values from environment variables and .env files automatically.
+4. files like app/rag/__init__.py , just makes rag a proper Python package so from app.rag.embeddings import ... works
