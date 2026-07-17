@@ -1,22 +1,22 @@
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from pydantic import BaseModel
 
 from app.rag.splitter import split_text
 from app.rag.vectorstore import get_vectorstore
+from app.auth import get_project_id
 
 router = APIRouter(prefix="/ingest", tags=["ingest"]) #  create router with prefix /ingest
 
 class NoteRequest(BaseModel): # Pydantic Notes Model
-    project_id: str
     note_id: str
     owner_id: str
     title: str
     text: str
 
 @router.post("/note")
-def ingest_note(payload: NoteRequest): # payload is automatically populated by FastAPI from the request JSON body, validated against NoteRequest
+def ingest_note(payload: NoteRequest, project_id: str = Depends(get_project_id)): # payload is automatically populated by FastAPI from the request JSON body, validated against NoteRequest
     if not payload.text.strip():
-        raise HTTPException(status_code=400, details="Note text is empty")
+        raise HTTPException(status_code=400, detail="Note text is empty")
     
     docs = split_text(payload.text, { # Split text into chunks
         "note_id": payload.note_id,
@@ -24,11 +24,11 @@ def ingest_note(payload: NoteRequest): # payload is automatically populated by F
         "note_title":payload.title,
     })
 
-    get_vectorstore(payload.project_id).add_documents(docs) # add cunks
+    get_vectorstore(project_id).add_documents(docs)  # add cunks
     return {"status": "ok", "chunks_indexed": len(docs)}
 
 @router.post("/upload")
-async def ingest_upload(project_id: str, file: UploadFile = File(...)):
+async def ingest_upload(file: UploadFile = File(...), project_id: str = Depends(get_project_id)):
     if file.content_type != "application/pdf":
         raise HTTPException(status_code=400, detail="Only PDFs supported")
     from pypdf import PdfReader
