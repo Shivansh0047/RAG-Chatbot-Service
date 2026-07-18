@@ -1,14 +1,11 @@
-from langchain_huggingface import HuggingFaceEmbeddings
 from functools import lru_cache
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from app.config import settings
-import os
 
-os.environ["HUGGINGFACEHUB_API_TOKEN"] = settings.hf_token  # for HF Inference API (LLM)
-os.environ["HF_TOKEN"] = settings.hf_token                  # for local model loader (embeddings)
 
-@lru_cache(maxsize=1)  # loads the model once, reuses it on every subsequent call by chaching itfrom functools import lru_cache
-def get_embeddings() -> HuggingFaceEmbeddings:
-    return HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-MiniLM-L6-v2",
-        model_kwargs={"device": "cpu"},
+@lru_cache(maxsize=1)
+def get_embeddings() -> HuggingFaceEndpointEmbeddings:
+    return HuggingFaceEndpointEmbeddings(
+        model="sentence-transformers/all-MiniLM-L6-v2",
+        huggingfacehub_api_token=settings.hf_token,
     )
