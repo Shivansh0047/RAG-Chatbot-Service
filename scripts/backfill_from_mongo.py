@@ -8,7 +8,7 @@ import time
 
 from app.ingestion.mongo_reader import iter_notes
 from app.rag.splitter import split_text
-from app.rag.vectorstore import get_vectorstore
+from app.rag.vectorstore import add_documents
 
 PROJECT_ID = "exam_notes_generator" # Project_id
 DELAY = 0.2  # small delay between notes to avoid overwhelming embedding model
@@ -32,7 +32,7 @@ def run():
             }
 
             docs = split_text(note["text"], metadata)
-            get_vectorstore(PROJECT_ID).add_documents(docs)
+            count = add_documents(PROJECT_ID, docs, note_id=note["note_id"])  # ← pass note_id
 
             total_notes += 1
             total_chunks += len(docs)

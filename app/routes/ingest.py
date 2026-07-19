@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from pydantic import BaseModel
 
 from app.rag.splitter import split_text
-from app.rag.vectorstore import get_vectorstore
+from app.rag.vectorstore import add_documents
 from app.auth import get_project_id
 
 router = APIRouter(prefix="/ingest", tags=["ingest"]) #  create router with prefix /ingest
@@ -24,8 +24,8 @@ def ingest_note(payload: NoteRequest, project_id: str = Depends(get_project_id))
         "note_title":payload.title,
     })
 
-    get_vectorstore(project_id).add_documents(docs)  # add cunks
-    return {"status": "ok", "chunks_indexed": len(docs)}
+    count = add_documents(project_id, docs, note_id=payload.note_id)  # add cunks with detesminictc url
+    return {"status": "ok", "chunks_indexed": count}
 
 @router.post("/upload")
 async def ingest_upload(file: UploadFile = File(...), project_id: str = Depends(get_project_id)):
@@ -43,5 +43,5 @@ async def ingest_upload(file: UploadFile = File(...), project_id: str = Depends(
     
     docs = split_text(text, {"note_title": file.filename, "source_type": "uploaded"})
 
-    get_vectorstore(project_id).add_documents(docs)
-    return {"status": "ok", "chunks_indexed": len(docs)}
+    count = add_documents(project_id, docs, note_id=file.filename)
+    return {"status": "ok", "chunks_indexed": count}
