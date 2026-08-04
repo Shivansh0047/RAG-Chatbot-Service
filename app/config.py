@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     qdrant_api_key: str  
 
     hf_token: str = ""
+    GOOGLE_API_TOKEN: str = ""
 
     class Config:
         env_file = ".env"  # load values from root-level .env file
