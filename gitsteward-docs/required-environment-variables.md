@@ -1,10 +1,10 @@
 ---
 source_anchor: "README.md#required-environment-variables"
-source_commit: "5b7f65d10ac4ea1c3c10df6b41a83618f4f95c06"
+source_commit: "7b3d1f2688fc0c849da3d444467ee40ddd1b5f7b"
 status: "updated"
 ---
 
-**Why flagged:** gitsteward-docs/README.md: The environment variable HF_TOKEN is no longer used and should be replaced with GOOGLE_API_TOKEN / gitsteward-docs/required-environment-variables.md: The section still references the deprecated `HF_TOKEN` environment variable. / gitsteward-docs/stack.md: The HuggingFace token is no longer used for embeddings, but still used for LLM
+**Why flagged:** gitsteward-docs/README.md: The environment variable HF_TOKEN is no longer used and should be replaced with GOOGLE_API_TOKEN / gitsteward-docs/modified_gitsteward_readme.md: The section lists HF_TOKEN as being used for both embeddings and LLM, but the code diff indicates that GOOGLE_API_TOKEN is used for embeddings and HF_TOKEN is used for LLM. / gitsteward-docs/project-structure.md: The required environment variables may have changed due to the update from HuggingFace to Google Generative AI, potentially requiring a new token or API key / gitsteward-docs/required-environment-variables.md: The section still references the deprecated `HF_TOKEN` environment variable and its usage is outdated. / gitsteward-docs/stack.md: The HuggingFace token environment variable may no longer be needed or may need to be replaced with a Google Generative AI token
 
 | Variable | Description |
 |---|---|

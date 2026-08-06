@@ -6,10 +6,9 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 
 ## How it works
 
-1. Notes are ingested (from MongoDB backfill or direct API call) → chunked → embedded → stored in Qdrant Cloud
-2. On a chat request, the question is embedded → most relevant chunks retrieved from Qdrant → passed as context to Llama 3.1 → answer returned with source attribution
-3. Each project gets its own isolated Qdrant collection via API key → `project_id` mapping — data never crosses between projects  
----
+1. Notes are ingested (from MongoDB backfill or direct API call) → chunked → embedded using Google Generative AI → stored in Qdrant Cloud
+2. On a chat request, the question is embedded using Google Generative AI → most relevant chunks retrieved from Qdrant → passed as context to Llama 3.1 → answer returned with source attribution
+3. Each project gets its own isolated Qdrant collection via API key → `project_id` mapping — data never crosses between projects
 
 ## Stack
 
@@ -17,7 +16,7 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 |---|---|
 | API | FastAPI |
 | RAG | LangChain (plain LCEL) |
-| Embeddings | `models/gemini-embedding-001` via Google Generative AI |
+| Embeddings | Google Generative AI |
 | LLM | `meta-llama/Llama-3.1-8B-Instruct` via HuggingFace Inference API |
 | Vector store | Qdrant Cloud (free tier, AWS Oregon) |
 | Source DB | MongoDB (read-only, for backfill) |
@@ -190,8 +189,8 @@ app/
 │   ├── splitter.py       # text chunking
 │   └── chain.py          # retrieve → prompt → generate
 └── ingestion/
-├── mongo_reader.py   # reads notes from MongoDB
-└── pdf_extract.py    # extracts text from uploaded PDFs
+    ├── mongo_reader.py   # reads notes from MongoDB
+    └── pdf_extract.py    # extracts text from uploaded PDFs
 scripts/
 └── backfill_from_mongo.py  # one-time knowledge base seeding
 ```
