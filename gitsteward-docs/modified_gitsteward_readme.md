@@ -8,7 +8,8 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 
 1. Notes are ingested (from MongoDB backfill or direct API call) → chunked → embedded → stored in Qdrant Cloud
 2. On a chat request, the question is embedded → most relevant chunks retrieved from Qdrant → passed as context to Llama 3.1 → answer returned with source attribution
-3. Each project gets its own isolated Qdrant collection via API key → `project_id` mapping — data never crosses between projects
+3. Each project gets its own isolated Qdrant collection via API key → `project_id` mapping — data never crosses between projects  
+---
 
 ## Stack
 
@@ -117,9 +118,7 @@ The `sources` array lists the note titles whose chunks were retrieved to generat
 
 ### AI Exam Notes Generator
 
-The primary integration. The knowledge base (`exam_notes_generator` collection in Qdrant) is seeded from all notes stored in the project's MongoDB database via a one-time backfill script (`scripts/backfill_from_mongo.py`). Going forward, new notes are auto-ingested by the Express backend calling `POST /ingest/note` after each generation.  
-**Currently indexed:** 30 notes, 168 chunks  
----
+The primary integration and one of many possible projects. The knowledge base is seeded from all notes stored in the project's MongoDB database via a one-time backfill script (`scripts/backfill_from_mongo.py`). Going forward, new notes are auto-ingested by the Express backend calling `POST /ingest/note` after each generation. This project's data lives in the `exam_notes_generator` collection in Qdrant, isolated from other projects' data. **Currently indexed:** 30 notes, 168 chunks
 
 ## Adding a new project
 
@@ -159,7 +158,8 @@ Visit `http://localhost:8000/docs` for interactive API docs.
 |---|---|
 | `QDRANT_URL` | Qdrant Cloud cluster URL |
 | `QDRANT_API_KEY` | Qdrant Cloud API key |
-| `GOOGLE_API_TOKEN` | Google API token (for embeddings + LLM) |
+| `GOOGLE_API_TOKEN` | Google API token (for embeddings) |
+| `HF_TOKEN` | HuggingFace token (for LLM) |
 | `MONGO_URI` | MongoDB connection string (for backfill) |
 | `MONGO_DB_NAME` | MongoDB database name |
 | `MONGO_NOTES_COLLECTION` | MongoDB collection name |
@@ -184,7 +184,7 @@ app/
 │   ├── ingest.py         # POST /ingest/note, POST /ingest/upload
 │   └── chat.py           # POST /chat
 ├── rag/
-│   ├── embeddings.py     # HuggingFace remote embeddings
+│   ├── embeddings.py     # Google Generative AI remote embeddings
 │   ├── llm.py            # Llama via HuggingFace Inference API
 │   ├── vectorstore.py    # Qdrant client, per-project collections
 │   ├── splitter.py       # text chunking
