@@ -1,10 +1,12 @@
 ---
 source_anchor: "README.md#stack"
-source_commit: "e622abcad2e46cb44d16445b91886aee8df4f53b"
+source_commit: "db57fb315705446f88164f57e19633e0ec89f2ae"
 status: "updated"
 ---
 
-**Why flagged:** app/rag/embeddings.py: The embeddings layer has changed from HuggingFace to Google Generative AI
+**Why flagged:** app/rag/llm.py: The LLM choice has changed from Gemini via Google to meta-llama/Llama-3.1-8B-Instruct via HuggingFace Inference API
+
+The embeddings layer and LLM choice have changed. The embeddings layer has changed from HuggingFace to Google Generative AI and the LLM choice has changed from Gemini via Google to meta-llama/Llama-3.1-8B-Instruct via HuggingFace Inference API 
 
 | Layer | Choice |
 |---|---|
