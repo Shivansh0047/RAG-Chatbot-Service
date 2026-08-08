@@ -12,14 +12,14 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 
 ## Stack
 
-The embeddings layer and LLM choice have changed. The embeddings layer has changed from HuggingFace to Google Generative AI and the LLM choice has changed from Gemini via Google to meta-llama/Llama-3.1-8B-Instruct via HuggingFace Inference API 
+The embeddings layer and LLM choice have changed. The embeddings layer has changed from Google Generative AI to HuggingFace and the LLM choice has changed from Gemini via Google to meta-llama/Llama-3.1-8B-Instruct via HuggingFace Inference API 
 
 | Layer | Choice |
 |---|---|
 | API | FastAPI |
 | RAG | LangChain (plain LCEL) |
-| Embeddings | `models/gemini-embedding-001` via Google Generative AI |
-| LLM | `meta-llama/Llama-3.1-8B-Instruct` via HuggingFace Inference API |
+| Embeddings | sentence-transformers/all-MiniLM-L6-v2 via HuggingFace |
+| LLM | meta-llama/Llama-3.1-8B-Instruct via HuggingFace Inference API |
 | Vector store | Qdrant Cloud (free tier, AWS Oregon) |
 | Source DB | MongoDB (read-only, for backfill) |
 | Hosting | Render (free tier, Oregon) |
@@ -163,8 +163,8 @@ The environment variable `HF_TOKEN` is still used, while `GOOGLE_API_TOKEN` is n
 |---|---|
 | `QDRANT_URL` | Qdrant Cloud cluster URL |
 | `QDRANT_API_KEY` | Qdrant Cloud API key |
-| `GOOGLE_API_TOKEN` | Google API token (for a specific purpose) |
-| `HF_TOKEN` | Hugging Face API token (for LLM) |
+| `GOOGLE_API_TOKEN` | Google API token (for a different purpose) |
+| `HF_TOKEN` | Hugging Face API token (for embeddings) |
 | `MONGO_URI` | MongoDB connection string (for backfill) |
 | `MONGO_DB_NAME` | MongoDB database name |
 | `MONGO_NOTES_COLLECTION` | MongoDB collection name |
