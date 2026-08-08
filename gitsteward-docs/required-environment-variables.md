@@ -4,7 +4,7 @@ source_commit: "c8cffe6942ee4c870987950fdb5324224562423a"
 status: "updated"
 ---
 
-**Why flagged:** app/config.py: The addition of GOOGLE_API_TOKEN to the config file is not reflected in the required environment variables table. / app/rag/llm.py: The HuggingFace token is replaced with Google API token
+**Why flagged:** app/config.py: The addition of GOOGLE_API_TOKEN to the config file is not reflected in the required environment variables table. / app/rag/llm.py: The HF_TOKEN variable is replaced with GOOGLE_API_TOKEN
 
 | Variable | Description |
 |---|---|

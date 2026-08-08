@@ -20,7 +20,8 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 | LLM | `gemini-2.5-flash` via Google Generative AI |
 | Vector store | Qdrant Cloud (free tier, AWS Oregon) |
 | Source DB | MongoDB (read-only, for backfill) |
-| Hosting | Render (free tier, Oregon) |
+| Hosting | Render (free tier, Oregon) |  
+---
 
 ## Authentication
 
