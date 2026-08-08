@@ -4,7 +4,7 @@ source_commit: "e622abcad2e46cb44d16445b91886aee8df4f53b"
 status: "updated"
 ---
 
-**Why flagged:** app/rag/embeddings.py: The embeddings layer has changed from HuggingFace Inference API to Google Generative AI
+**Why flagged:** app/rag/embeddings.py: The embeddings layer has changed from HuggingFace to Google Generative AI
 
 | Layer | Choice |
 |---|---|
