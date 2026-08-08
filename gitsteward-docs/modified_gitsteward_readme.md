@@ -7,18 +7,19 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 ## How it works
 
 1. Notes are ingested (from MongoDB backfill or direct API call) → chunked → embedded → stored in Qdrant Cloud
-2. On a chat request, the question is embedded → most relevant chunks retrieved from Qdrant → passed as context to Llama 3.1 → answer returned with source attribution
-3. Each project gets its own isolated Qdrant collection via API key → `project_id` mapping — data never crosses between projects  
----
+2. On a chat request, the question is embedded → most relevant chunks retrieved from Qdrant → passed as context to Gemini 2.5 → answer returned with source attribution
+3. Each project gets its own isolated Qdrant collection via API key → `project_id` mapping — data never crosses between projects
 
 ## Stack
+
+**Why flagged:** app/rag/llm.py: The LLM layer has changed from HuggingFace to Google Generative AI
 
 | Layer | Choice |
 |---|---|
 | API | FastAPI |
 | RAG | LangChain (plain LCEL) |
 | Embeddings | `models/gemini-embedding-001` via Google Generative AI |
-| LLM | `meta-llama/Llama-3.1-8B-Instruct` via HuggingFace Inference API |
+| LLM | `gemini-2.5-flash` via Google Generative AI |
 | Vector store | Qdrant Cloud (free tier, AWS Oregon) |
 | Source DB | MongoDB (read-only, for backfill) |
 | Hosting | Render (free tier, Oregon) |
@@ -155,6 +156,8 @@ uvicorn app.main:app --reload
 Visit `http://localhost:8000/docs` for interactive API docs.
 
 ### Required environment variables
+
+The environment variable `HF_TOKEN` is no longer used and should be replaced with `GOOGLE_API_TOKEN`
 
 | Variable | Description |
 |---|---|

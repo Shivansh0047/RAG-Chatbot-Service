@@ -1,10 +1,12 @@
 ---
 source_anchor: "README.md#required-environment-variables"
-source_commit: "e622abcad2e46cb44d16445b91886aee8df4f53b"
+source_commit: "c8cffe6942ee4c870987950fdb5324224562423a"
 status: "updated"
 ---
 
-**Why flagged:** app/rag/embeddings.py: The environment variable `HF_TOKEN` is no longer used and should be replaced with `GOOGLE_API_TOKEN`
+**Why flagged:** app/rag/llm.py: The environment variable HF_TOKEN is no longer used and should be replaced with GOOGLE_API_TOKEN
+
+The environment variable `HF_TOKEN` is no longer used and should be replaced with `GOOGLE_API_TOKEN`
 
 | Variable | Description |
 |---|---|
