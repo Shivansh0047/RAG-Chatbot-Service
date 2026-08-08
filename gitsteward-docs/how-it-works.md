@@ -1,10 +1,10 @@
 ---
 source_anchor: "README.md#how-it-works"
-source_commit: "c8cffe6942ee4c870987950fdb5324224562423a"
+source_commit: "e622abcad2e46cb44d16445b91886aee8df4f53b"
 status: "updated"
 ---
 
-**Why flagged:** app/rag/llm.py: The LLM used in the chat request has changed from Llama 3.1 to Gemini 2.5
+**Why flagged:** app/rag/embeddings.py: The LLM used in the chat request has changed from Llama to Gemini, which may require updates to the explanation of the chat request process.
 
 1. Notes are ingested (from MongoDB backfill or direct API call) → chunked → embedded → stored in Qdrant Cloud
 2. On a chat request, the question is embedded → most relevant chunks retrieved from Qdrant → passed as context to Gemini 2.5 → answer returned with source attribution

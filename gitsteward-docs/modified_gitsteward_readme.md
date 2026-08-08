@@ -12,17 +12,16 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 
 ## Stack
 
-**Why flagged:** app/rag/llm.py: The LLM layer has changed from HuggingFace to Google Generative AI
-
 | Layer | Choice |
 |---|---|
 | API | FastAPI |
 | RAG | LangChain (plain LCEL) |
-| Embeddings | `models/gemini-embedding-001` via Google Generative AI |
-| LLM | `gemini-2.5-flash` via Google Generative AI |
+| Embeddings | `sentence-transformers/all-MiniLM-L6-v2` via HuggingFace Inference API |
+| LLM | `meta-llama/Llama-3.1-8B-Instruct` via HuggingFace Inference API |
 | Vector store | Qdrant Cloud (free tier, AWS Oregon) |
 | Source DB | MongoDB (read-only, for backfill) |
-| Hosting | Render (free tier, Oregon) |
+| Hosting | Render (free tier, Oregon) |  
+---
 
 ## Authentication
 
@@ -157,13 +156,11 @@ Visit `http://localhost:8000/docs` for interactive API docs.
 
 ### Required environment variables
 
-The environment variable `HF_TOKEN` is no longer used and should be replaced with `GOOGLE_API_TOKEN`
-
 | Variable | Description |
 |---|---|
 | `QDRANT_URL` | Qdrant Cloud cluster URL |
 | `QDRANT_API_KEY` | Qdrant Cloud API key |
-| `GOOGLE_API_TOKEN` | Google API token (for embeddings + LLM) |
+| `HF_TOKEN` | HuggingFace token (for embeddings + LLM) |
 | `MONGO_URI` | MongoDB connection string (for backfill) |
 | `MONGO_DB_NAME` | MongoDB database name |
 | `MONGO_NOTES_COLLECTION` | MongoDB collection name |
