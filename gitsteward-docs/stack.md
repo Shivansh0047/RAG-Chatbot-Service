@@ -1,10 +1,10 @@
 ---
 source_anchor: "README.md#stack"
-source_commit: "e622abcad2e46cb44d16445b91886aee8df4f53b"
+source_commit: "4282fd4b246413c8ead576e1b52a44f68eefdf45"
 status: "updated"
 ---
 
-**Why flagged:** app/rag/embeddings.py: The embeddings layer has changed from HuggingFace Inference API to Google Generative AI
+**Why flagged:** gitsteward-docs/README.md: The embeddings layer has changed from HuggingFace Inference API to Google Generative AI / gitsteward-docs/stack.md: The embeddings layer has changed from HuggingFace Inference API to Google Generative AI
 
 | Layer | Choice |
 |---|---|
@@ -14,4 +14,5 @@ status: "updated"
 | LLM | `meta-llama/Llama-3.1-8B-Instruct` via HuggingFace Inference API |
 | Vector store | Qdrant Cloud (free tier, AWS Oregon) |
 | Source DB | MongoDB (read-only, for backfill) |
-| Hosting | Render (free tier, Oregon) |
+| Hosting | Render (free tier, Oregon) |  
+---

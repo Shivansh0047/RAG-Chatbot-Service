@@ -6,10 +6,9 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 
 ## How it works
 
-1. Notes are ingested (from MongoDB backfill or direct API call) → chunked → embedded → stored in Qdrant Cloud
-2. On a chat request, the question is embedded → most relevant chunks retrieved from Qdrant → passed as context to Llama 3.1 → answer returned with source attribution
-3. Each project gets its own isolated Qdrant collection via API key → `project_id` mapping — data never crosses between projects  
----
+1. Notes are ingested (from MongoDB backfill or direct API call) → chunked → embedded using Google Generative AI's Gemini embedding model → stored in Qdrant Cloud
+2. On a chat request, the question is embedded using Google Generative AI's Gemini embedding model → most relevant chunks retrieved from Qdrant → passed as context to Llama 3.1 → answer returned with source attribution
+3. Each project gets its own isolated Qdrant collection via API key → `project_id` mapping — data never crosses between projects
 
 ## Stack
 
@@ -21,7 +20,8 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 | LLM | `meta-llama/Llama-3.1-8B-Instruct` via HuggingFace Inference API |
 | Vector store | Qdrant Cloud (free tier, AWS Oregon) |
 | Source DB | MongoDB (read-only, for backfill) |
-| Hosting | Render (free tier, Oregon) |
+| Hosting | Render (free tier, Oregon) |  
+---
 
 ## Authentication
 
@@ -119,7 +119,7 @@ The `sources` array lists the note titles whose chunks were retrieved to generat
 ### AI Exam Notes Generator
 
 The primary integration. The knowledge base (`exam_notes_generator` collection in Qdrant) is seeded from all notes stored in the project's MongoDB database via a one-time backfill script (`scripts/backfill_from_mongo.py`). Going forward, new notes are auto-ingested by the Express backend calling `POST /ingest/note` after each generation.  
-**Currently indexed:** 30 notes, 168 chunks  
+**Currently indexed:** 75 notes, 432 chunks  
 ---
 
 ## Adding a new project
@@ -175,6 +175,8 @@ python -m scripts.backfill_from_mongo
 
 ## Project structure
 
+Project structure
+
 ```
 app/
 ├── main.py               # FastAPI app entrypoint
@@ -185,14 +187,14 @@ app/
 │   ├── ingest.py         # POST /ingest/note, POST /ingest/upload
 │   └── chat.py           # POST /chat
 ├── rag/
-│   ├── embeddings.py     # HuggingFace remote embeddings
+│   ├── embeddings.py     # Google Generative AI embeddings
 │   ├── llm.py            # Llama via HuggingFace Inference API
 │   ├── vectorstore.py    # Qdrant client, per-project collections
 │   ├── splitter.py       # text chunking
 │   └── chain.py          # retrieve → prompt → generate
 └── ingestion/
-├── mongo_reader.py   # reads notes from MongoDB
-└── pdf_extract.py    # extracts text from uploaded PDFs
+    ├── mongo_reader.py   # reads notes from MongoDB
+    └── pdf_extract.py    # extracts text from uploaded PDFs
 scripts/
 └── backfill_from_mongo.py  # one-time knowledge base seeding
 ```

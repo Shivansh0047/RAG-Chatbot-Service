@@ -1,10 +1,10 @@
 ---
 source_anchor: "README.md#required-environment-variables"
-source_commit: "e622abcad2e46cb44d16445b91886aee8df4f53b"
+source_commit: "4282fd4b246413c8ead576e1b52a44f68eefdf45"
 status: "updated"
 ---
 
-**Why flagged:** app/rag/embeddings.py: The environment variable `HF_TOKEN` is no longer used and should be replaced with `GOOGLE_API_TOKEN`
+**Why flagged:** gitsteward-docs/README.md: The environment variable `HF_TOKEN` is no longer used and should be replaced with `GOOGLE_API_TOKEN` / gitsteward-docs/stack.md: A new environment variable may be required for Google Generative AI, and the description of HF_TOKEN may need to be updated
 
 | Variable | Description |
 |---|---|
