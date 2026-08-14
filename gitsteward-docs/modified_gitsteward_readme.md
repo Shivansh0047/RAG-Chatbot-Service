@@ -16,7 +16,7 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 |---|---|
 | API | FastAPI |
 | RAG | LangChain (plain LCEL) |
-| Embeddings | `gemini-embedding-001` via Hugging Face |
+| Embeddings | `sentence-transformers/all-MiniLM-L6-v2` via Hugging Face |
 | LLM | `meta-llama/Llama-3.1-8B-Instruct` via Hugging Face |
 | Vector store | Qdrant Cloud (free tier, AWS Oregon) |
 | Source DB | MongoDB (read-only, for backfill) |
@@ -159,7 +159,7 @@ Visit `http://localhost:8000/docs` for interactive API docs.
 |---|---|
 | `QDRANT_URL` | Qdrant Cloud cluster URL |
 | `QDRANT_API_KEY` | Qdrant Cloud API key |
-| `hf_token` | Hugging Face API token (for LLM) |
+| `hf_token` | Hugging Face API token (for embeddings) |
 | `MONGO_URI` | MongoDB connection string (for backfill) |
 | `MONGO_DB_NAME` | MongoDB database name |
 | `MONGO_NOTES_COLLECTION` | MongoDB collection name |

@@ -1,10 +1,10 @@
 ---
 source_anchor: "README.md#how-it-works"
-source_commit: "db57fb315705446f88164f57e19633e0ec89f2ae"
+source_commit: "7f4d602a67052d562242dd52460b7dbcf3913d53"
 status: "updated"
 ---
 
-**Why flagged:** app/rag/llm.py: The chat request processing is changed to use Hugging Face instead of Google Generative AI
+**Why flagged:** app/rag/embeddings.py: The embeddings step now uses Hugging Face instead of Google Generative AI
 
 1. Notes are ingested (from MongoDB backfill or direct API call) → chunked → embedded → stored in Qdrant Cloud
 2. On a chat request, the question is embedded → most relevant chunks retrieved from Qdrant → passed as context to Hugging Face → answer returned with source attribution
