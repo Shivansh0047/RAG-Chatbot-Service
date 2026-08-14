@@ -1,16 +1,16 @@
 ---
 source_anchor: "README.md#required-environment-variables"
-source_commit: "e622abcad2e46cb44d16445b91886aee8df4f53b"
+source_commit: "7f4d602a67052d562242dd52460b7dbcf3913d53"
 status: "updated"
 ---
 
-**Why flagged:** app/rag/embeddings.py: The environment variable `HF_TOKEN` is no longer used and should be replaced with `GOOGLE_API_TOKEN`
+**Why flagged:** app/rag/embeddings.py: The environment variable for Google API token is no longer needed and a new variable for Hugging Face API token is already present but the description should be updated to reflect its new usage for embeddings
 
 | Variable | Description |
 |---|---|
 | `QDRANT_URL` | Qdrant Cloud cluster URL |
 | `QDRANT_API_KEY` | Qdrant Cloud API key |
-| `GOOGLE_API_TOKEN` | Google API token (for embeddings + LLM) |
+| `hf_token` | Hugging Face API token (for embeddings) |
 | `MONGO_URI` | MongoDB connection string (for backfill) |
 | `MONGO_DB_NAME` | MongoDB database name |
 | `MONGO_NOTES_COLLECTION` | MongoDB collection name |

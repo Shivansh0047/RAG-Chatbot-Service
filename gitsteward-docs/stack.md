@@ -1,17 +1,17 @@
 ---
 source_anchor: "README.md#stack"
-source_commit: "e622abcad2e46cb44d16445b91886aee8df4f53b"
+source_commit: "7f4d602a67052d562242dd52460b7dbcf3913d53"
 status: "updated"
 ---
 
-**Why flagged:** app/rag/embeddings.py: The embeddings layer has changed from HuggingFace to Google Generative AI
+**Why flagged:** app/rag/embeddings.py: The embeddings layer is now using Hugging Face instead of Google Generative AI
 
 | Layer | Choice |
 |---|---|
 | API | FastAPI |
 | RAG | LangChain (plain LCEL) |
-| Embeddings | `models/gemini-embedding-001` via Google Generative AI |
-| LLM | `meta-llama/Llama-3.1-8B-Instruct` via HuggingFace Inference API |
+| Embeddings | `sentence-transformers/all-MiniLM-L6-v2` via Hugging Face |
+| LLM | `meta-llama/Llama-3.1-8B-Instruct` via Hugging Face |
 | Vector store | Qdrant Cloud (free tier, AWS Oregon) |
 | Source DB | MongoDB (read-only, for backfill) |
 | Hosting | Render (free tier, Oregon) |
