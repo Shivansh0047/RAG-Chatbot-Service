@@ -7,8 +7,9 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 ## How it works
 
 1. Notes are ingested (from MongoDB backfill or direct API call) → chunked → embedded → stored in Qdrant Cloud
-2. On a chat request, the question is embedded → most relevant chunks retrieved from Qdrant → passed as context to Hugging Face → answer returned with source attribution
-3. Each project gets its own isolated Qdrant collection via API key → `project_id` mapping — data never crosses between projects
+2. On a chat request, the question is embedded → most relevant chunks retrieved from Qdrant → passed as context to Google Generative AI → answer returned with source attribution
+3. Each project gets its own isolated Qdrant collection via API key → `project_id` mapping — data never crosses between projects  
+---
 
 ## Stack
 
@@ -16,11 +17,12 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 |---|---|
 | API | FastAPI |
 | RAG | LangChain (plain LCEL) |
-| Embeddings | `sentence-transformers/all-MiniLM-L6-v2` via Hugging Face |
-| LLM | `meta-llama/Llama-3.1-8B-Instruct` via Hugging Face |
+| Embeddings | `gemini-embedding-001` via Google Generative AI |
+| LLM | `gemini-2.5-flash` via Google Generative AI |
 | Vector store | Qdrant Cloud (free tier, AWS Oregon) |
 | Source DB | MongoDB (read-only, for backfill) |
-| Hosting | Render (free tier, Oregon) |
+| Hosting | Render (free tier, Oregon) |  
+---
 
 ## Authentication
 
@@ -159,7 +161,7 @@ Visit `http://localhost:8000/docs` for interactive API docs.
 |---|---|
 | `QDRANT_URL` | Qdrant Cloud cluster URL |
 | `QDRANT_API_KEY` | Qdrant Cloud API key |
-| `hf_token` | Hugging Face API token (for embeddings) |
+| `GOOGLE_API_TOKEN` | Google API token (for embeddings + LLM) |
 | `MONGO_URI` | MongoDB connection string (for backfill) |
 | `MONGO_DB_NAME` | MongoDB database name |
 | `MONGO_NOTES_COLLECTION` | MongoDB collection name |
@@ -174,7 +176,6 @@ python -m scripts.backfill_from_mongo
 
 ## Project structure
 
-```
 app/
 ├── main.py               # FastAPI app entrypoint
 ├── config.py             # all env vars in one place
@@ -184,8 +185,8 @@ app/
 │   ├── ingest.py         # POST /ingest/note, POST /ingest/upload
 │   └── chat.py           # POST /chat
 ├── rag/
-│   ├── embeddings.py     # Google Generative AI
-│   ├── llm.py            # Gemini via Google
+│   ├── embeddings.py     # HuggingFace embeddings via LangChain
+│   ├── llm.py            # HuggingFace Llama via LangChain
 │   ├── vectorstore.py    # Qdrant client, per-project collections
 │   ├── splitter.py       # text chunking
 │   └── chain.py          # retrieve → prompt → generate
@@ -194,4 +195,3 @@ app/
 └── pdf_extract.py    # extracts text from uploaded PDFs
 scripts/
 └── backfill_from_mongo.py  # one-time knowledge base seeding
-```
