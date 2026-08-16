@@ -1,10 +1,10 @@
 ---
 source_anchor: "README.md#project-structure"
-source_commit: "7f4d602a67052d562242dd52460b7dbcf3913d53"
+source_commit: "db57fb315705446f88164f57e19633e0ec89f2ae"
 status: "updated"
 ---
 
-**Why flagged:** app/rag/embeddings.py: The comment for `rag/embeddings.py` still says “Google Generative AI” even though the code now uses HuggingFace embeddings.
+**Why flagged:** app/rag/llm.py: llm.py now uses HuggingFace Llama instead of Gemini, so the file description is outdated
 
 app/
 ├── main.py               # FastAPI app entrypoint
@@ -16,7 +16,7 @@ app/
 │   └── chat.py           # POST /chat
 ├── rag/
 │   ├── embeddings.py     # HuggingFace embeddings via endpoint
-│   ├── llm.py            # Gemini via Google
+│   ├── llm.py            # HuggingFace Llama (Meta‑Llama‑3.1‑8B‑Instruct) via LangChain
 │   ├── vectorstore.py    # Qdrant client, per-project collections
 │   ├── splitter.py       # text chunking
 │   └── chain.py          # retrieve → prompt → generate

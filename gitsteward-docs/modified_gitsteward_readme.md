@@ -6,10 +6,14 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 
 ## How it works
 
-1. Notes are ingested (from MongoDB backfill or direct API call) → chunked → embedded → stored in Qdrant Cloud
-2. On a chat request, the question is embedded → most relevant chunks retrieved from Qdrant → passed as context to Google Generative AI → answer returned with source attribution
-3. Each project gets its own isolated Qdrant collection via API key → `project_id` mapping — data never crosses between projects  
----
+1. Notes are ingested (via MongoDB back‑fill or direct API call) → chunked → embedded → stored in Qdrant Cloud.  
+2. On a chat request:  
+   - The user question is embedded.  
+   - The most relevant chunks are retrieved from the project‑specific Qdrant collection.  
+   - Those chunks are supplied as context to the LLM, which is now a **Hugging Face** model (`meta‑llama/Llama‑3.1‑8B‑Instruct`) accessed through `ChatHuggingFace` and a `HuggingFaceEndpoint`.  
+   - The LLM generates an answer, which is returned together with source attribution for the retrieved chunks.  
+3. Each project gets its own isolated Qdrant collection via API‑key‑based `project_id` mapping, ensuring data never crosses between projects.  
+4. The LLM client is instantiated once and cached (`@lru_cache(maxsize=1)`) by `get_llm()`, which builds the `HuggingFaceEndpoint` with the configured repository ID, task, token limits, sampling settings, and the Hugging Face API token from the application settings.
 
 ## Stack
 
@@ -18,7 +22,7 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 | API | FastAPI |
 | RAG | LangChain (plain LCEL) |
 | Embeddings | `sentence-transformers/all-MiniLM-L6-v2` via HuggingFace Inference API |
-| LLM | `gemini-2.5-flash` via Google Generative AI |
+| LLM | `meta-llama/Llama-3.1-8B-Instruct` via HuggingFace Inference API |
 | Vector store | Qdrant Cloud (free tier, AWS Oregon) |
 | Source DB | MongoDB (read-only, for backfill) |
 | Hosting | Render (free tier, Oregon) |
@@ -160,8 +164,7 @@ Visit `http://localhost:8000/docs` for interactive API docs.
 |---|---|
 | `QDRANT_URL` | URL of the Qdrant Cloud cluster |
 | `QDRANT_API_KEY` | API key for authenticating with Qdrant Cloud |
-| `HF_TOKEN` | HuggingFace Hub API token used for embedding generation |
-| `GOOGLE_API_TOKEN` | Google API token used for Google‑based LLM calls (no longer required for embeddings) |
+| `HF_TOKEN` | HuggingFace Hub API token used for both embedding generation and LLM calls via the HuggingFace endpoint |
 | `MONGO_URI` | MongoDB connection string for back‑fill operations |
 | `MONGO_DB_NAME` | Name of the MongoDB database |
 | `MONGO_NOTES_COLLECTION` | Name of the MongoDB collection that stores notes |
@@ -186,7 +189,7 @@ app/
 │   └── chat.py           # POST /chat
 ├── rag/
 │   ├── embeddings.py     # HuggingFace embeddings via endpoint
-│   ├── llm.py            # Gemini via Google
+│   ├── llm.py            # HuggingFace Llama (Meta‑Llama‑3.1‑8B‑Instruct) via LangChain
 │   ├── vectorstore.py    # Qdrant client, per-project collections
 │   ├── splitter.py       # text chunking
 │   └── chain.py          # retrieve → prompt → generate
