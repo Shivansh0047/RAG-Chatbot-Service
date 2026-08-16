@@ -8,6 +8,12 @@ Commit: 7f4d602
 Updated: 2026-08-14T12:50:02+00:00
 Summary: app/rag/embeddings.py: The embeddings step now uses Hugging Face instead of Google Generative AI
 
+## Project Structure (#project-structure)
+Status: updated
+Commit: 7f4d602
+Updated: 2026-08-16T05:24:45+00:00
+Summary: app/rag/embeddings.py: embeddings.py now uses HuggingFaceEndpointEmbeddings instead of Google Generative AI, so the comment in the tree is outdated
+
 ## Required Environment Variables (#required-environment-variables)
 Status: updated
 Commit: 7f4d602
