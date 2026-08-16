@@ -17,12 +17,11 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 |---|---|
 | API | FastAPI |
 | RAG | LangChain (plain LCEL) |
-| Embeddings | `gemini-embedding-001` via Google Generative AI |
+| Embeddings | `sentence-transformers/all-MiniLM-L6-v2` via HuggingFace Inference API |
 | LLM | `gemini-2.5-flash` via Google Generative AI |
 | Vector store | Qdrant Cloud (free tier, AWS Oregon) |
 | Source DB | MongoDB (read-only, for backfill) |
-| Hosting | Render (free tier, Oregon) |  
----
+| Hosting | Render (free tier, Oregon) |
 
 ## Authentication
 
@@ -159,13 +158,14 @@ Visit `http://localhost:8000/docs` for interactive API docs.
 
 | Variable | Description |
 |---|---|
-| `QDRANT_URL` | Qdrant Cloud cluster URL |
-| `QDRANT_API_KEY` | Qdrant Cloud API key |
-| `GOOGLE_API_TOKEN` | Google API token (for embeddings + LLM) |
-| `MONGO_URI` | MongoDB connection string (for backfill) |
-| `MONGO_DB_NAME` | MongoDB database name |
-| `MONGO_NOTES_COLLECTION` | MongoDB collection name |
-| `API_KEYS_JSON` | JSON map of `{"api_key": "project_id"}` |
+| `QDRANT_URL` | URL of the Qdrant Cloud cluster |
+| `QDRANT_API_KEY` | API key for authenticating with Qdrant Cloud |
+| `HF_TOKEN` | HuggingFace Hub API token used for embedding generation |
+| `GOOGLE_API_TOKEN` | Google API token used for Google‑based LLM calls (no longer required for embeddings) |
+| `MONGO_URI` | MongoDB connection string for back‑fill operations |
+| `MONGO_DB_NAME` | Name of the MongoDB database |
+| `MONGO_NOTES_COLLECTION` | Name of the MongoDB collection that stores notes |
+| `API_KEYS_JSON` | JSON map of `{"api_key": "project_id"}` for external service authentication |
 
 ### Seeding the knowledge base (one-time)
 
@@ -185,13 +185,13 @@ app/
 │   ├── ingest.py         # POST /ingest/note, POST /ingest/upload
 │   └── chat.py           # POST /chat
 ├── rag/
-│   ├── embeddings.py     # HuggingFace embeddings via LangChain
-│   ├── llm.py            # HuggingFace Llama via LangChain
+│   ├── embeddings.py     # HuggingFace embeddings via endpoint
+│   ├── llm.py            # Gemini via Google
 │   ├── vectorstore.py    # Qdrant client, per-project collections
 │   ├── splitter.py       # text chunking
 │   └── chain.py          # retrieve → prompt → generate
 └── ingestion/
-├── mongo_reader.py   # reads notes from MongoDB
-└── pdf_extract.py    # extracts text from uploaded PDFs
+    ├── mongo_reader.py   # reads notes from MongoDB
+    └── pdf_extract.py    # extracts text from uploaded PDFs
 scripts/
 └── backfill_from_mongo.py  # one-time knowledge base seeding
