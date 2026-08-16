@@ -4,24 +4,24 @@ source_commit: "db57fb315705446f88164f57e19633e0ec89f2ae"
 status: "updated"
 ---
 
-**Why flagged:** app/rag/llm.py: llm.py now uses HuggingFace Llama instead of Gemini, so the file description is outdated
+**Why flagged:** app/rag/llm.py: llm.py now uses HuggingFace Llama instead of Gemini, so the description is outdated.
 
 app/
 ├── main.py               # FastAPI app entrypoint
-├── config.py             # all env vars in one place
+├── config.py             # Centralized environment variables (including HF token)
 ├── auth.py               # API key → project_id resolution
-├── models.py             # request/response schemas
+├── models.py             # Pydantic request/response schemas
 ├── routes/
 │   ├── ingest.py         # POST /ingest/note, POST /ingest/upload
 │   └── chat.py           # POST /chat
 ├── rag/
-│   ├── embeddings.py     # HuggingFace embeddings via endpoint
-│   ├── llm.py            # HuggingFace Llama (Meta‑Llama‑3.1‑8B‑Instruct) via LangChain
-│   ├── vectorstore.py    # Qdrant client, per-project collections
-│   ├── splitter.py       # text chunking
-│   └── chain.py          # retrieve → prompt → generate
+│   ├── embeddings.py     # Google Generative AI embeddings
+│   ├── llm.py            # HuggingFace Llama 3.1 via LangChain HuggingFace wrapper
+│   ├── vectorstore.py    # Qdrant client, per‑project collections
+│   ├── splitter.py       # Text chunking utilities
+│   └── chain.py          # Retrieval → prompt → generation pipeline
 └── ingestion/
-    ├── mongo_reader.py   # reads notes from MongoDB
-    └── pdf_extract.py    # extracts text from uploaded PDFs
+    ├── mongo_reader.py   # Reads notes from MongoDB
+    └── pdf_extract.py    # Extracts text from uploaded PDFs
 scripts/
-└── backfill_from_mongo.py  # one-time knowledge base seeding
+└── backfill_from_mongo.py  # One‑time knowledge‑base seeding script
