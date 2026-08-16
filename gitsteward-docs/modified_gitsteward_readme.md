@@ -185,7 +185,7 @@ app/
 │   ├── ingest.py         # POST /ingest/note, POST /ingest/upload
 │   └── chat.py           # POST /chat
 ├── rag/
-│   ├── embeddings.py     # Google Generative AI
+│   ├── embeddings.py     # HuggingFace embeddings via LangChain
 │   ├── llm.py            # HuggingFace Llama via LangChain
 │   ├── vectorstore.py    # Qdrant client, per-project collections
 │   ├── splitter.py       # text chunking

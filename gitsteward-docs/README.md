@@ -10,9 +10,9 @@ Summary: app/rag/embeddings.py: The embeddings step now uses Hugging Face instea
 
 ## Project Structure (#project-structure)
 Status: updated
-Commit: db57fb3
-Updated: 2026-08-16T05:44:50+00:00
-Summary: app/rag/llm.py: llm.py is no longer Gemini via Google but HuggingFace Llama
+Commit: 7f4d602
+Updated: 2026-08-16T05:49:02+00:00
+Summary: app/rag/embeddings.py: the file comment still says "Google Generative AI" while the code now uses HuggingFace embeddings
 
 ## Required Environment Variables (#required-environment-variables)
 Status: updated
