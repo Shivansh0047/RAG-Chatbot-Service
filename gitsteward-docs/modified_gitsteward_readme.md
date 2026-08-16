@@ -6,11 +6,10 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 
 ## How it works
 
-1. Notes are ingested (from MongoDB backfill or direct API call) → chunked → embedded → stored in a dedicated Qdrant collection for the project.  
-2. On a chat request, the question is embedded → the most relevant chunks are retrieved from Qdrant → those chunks are supplied as context to a HuggingFace LLM (Meta Llama‑3.1‑8B‑Instruct) via a cached `ChatHuggingFace` instance → answer is generated and returned with source attribution.  
-3. Each project gets its own isolated Qdrant collection via API key → `project_id` mapping ensures data never crosses between projects.  
-
-*The LLM is instantiated once per process (`@lru_cache(maxsize=1)`) using a `HuggingFaceEndpoint` configured with `repo_id="meta-llama/Llama-3.1-8B-Instruct"`, `task="text-generation"`, `max_new_tokens=512`, `do_sample=False`, and the HuggingFace Hub token from settings.*
+1. Notes are ingested (from MongoDB backfill or direct API call) → chunked → embedded → stored in Qdrant Cloud
+2. On a chat request, the question is embedded → most relevant chunks retrieved from Qdrant → passed as context to Google Generative AI → answer returned with source attribution
+3. Each project gets its own isolated Qdrant collection via API key → `project_id` mapping — data never crosses between projects  
+---
 
 ## Stack
 
@@ -18,7 +17,7 @@ A standalone RAG (Retrieval-Augmented Generation) chatbot service built with **F
 |---|---|
 | API | FastAPI |
 | RAG | LangChain (plain LCEL) |
-| Embeddings | `gemini-embedding-001` via Google Generative AI |
+| Embeddings | `sentence-transformers/all-MiniLM-L6-v2` via HuggingFace |
 | LLM | `meta-llama/Llama-3.1-8B-Instruct` via HuggingFace (text‑generation endpoint) |
 | Vector store | Qdrant Cloud (free tier, AWS Oregon) |
 | Source DB | MongoDB (read‑only, for backfill) |
@@ -161,7 +160,7 @@ Visit `http://localhost:8000/docs` for interactive API docs.
 |---|---|
 | `QDRANT_URL` | Qdrant Cloud cluster URL |
 | `QDRANT_API_KEY` | Qdrant Cloud API key |
-| `HF_TOKEN` | HuggingFace Hub API token used for the LLM endpoint |
+| `GOOGLE_API_TOKEN` | Google API token (for embeddings + LLM) |
 | `MONGO_URI` | MongoDB connection string (for backfill) |
 | `MONGO_DB_NAME` | MongoDB database name |
 | `MONGO_NOTES_COLLECTION` | MongoDB collection name |
@@ -177,17 +176,17 @@ python -m scripts.backfill_from_mongo
 ## Project structure
 
 app/
-├── main.py               # FastAPI app entrypoint
-├── config.py             # Centralized environment variables (including HF token)
-├── auth.py               # API key → project_id resolution
+├── main.py               # FastAPI application entry point
+├── config.py             # Centralized environment variables (includes `hf_token` for HuggingFace)
+├── auth.py               # Resolves API key to project ID
 ├── models.py             # Pydantic request/response schemas
 ├── routes/
-│   ├── ingest.py         # POST /ingest/note, POST /ingest/upload
-│   └── chat.py           # POST /chat
+│   ├── ingest.py         # POST /ingest/note, POST /ingest/upload
+│   └── chat.py           # POST /chat
 ├── rag/
-│   ├── embeddings.py     # Google Generative AI embeddings
-│   ├── llm.py            # HuggingFace Llama 3.1 via LangChain HuggingFace wrapper
-│   ├── vectorstore.py    # Qdrant client, per‑project collections
+│   ├── embeddings.py     # HuggingFace sentence‑transformer embeddings via `HuggingFaceEndpointEmbeddings`
+│   ├── llm.py            # Llama 3.1 accessed through LangChain’s HuggingFace wrapper
+│   ├── vectorstore.py    # Qdrant client with per‑project collections
 │   ├── splitter.py       # Text chunking utilities
 │   └── chain.py          # Retrieval → prompt → generation pipeline
 └── ingestion/
@@ -195,3 +194,7 @@ app/
     └── pdf_extract.py    # Extracts text from uploaded PDFs
 scripts/
 └── backfill_from_mongo.py  # One‑time knowledge‑base seeding script
+
+**Key implementation detail**
+
+* `app/rag/embeddings.py` now defines `get_embeddings()` (cached with `@lru_cache`) that returns a `HuggingFaceEndpointEmbeddings` instance configured with the `sentence-transformers/all-MiniLM-L6-v2` model and the HuggingFace Hub token from `settings.hf_token`. The previous Google Generative AI embedding code has been removed.
