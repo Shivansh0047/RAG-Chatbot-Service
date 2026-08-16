@@ -4,25 +4,25 @@ Auto-generated summary of every README section GitSteward has flagged.
 
 ## How It Works (#how-it-works)
 Status: updated
-Commit: 7f4d602
-Updated: 2026-08-14T12:50:02+00:00
-Summary: app/rag/embeddings.py: The embeddings step now uses Hugging Face instead of Google Generative AI
+Commit: db57fb3
+Updated: 2026-08-16T20:01:48+00:00
+Summary: app/rag/llm.py: the workflow still says the context is sent to Google Generative AI, which is no longer true
 
 ## Project Structure (#project-structure)
 Status: updated
-Commit: 7f4d602
-Updated: 2026-08-16T05:49:02+00:00
-Summary: app/rag/embeddings.py: the file comment still says "Google Generative AI" while the code now uses HuggingFace embeddings
+Commit: db57fb3
+Updated: 2026-08-16T20:01:48+00:00
+Summary: app/rag/llm.py: llm.py now uses HuggingFace Llama instead of Gemini, so the file description is outdated
 
 ## Required Environment Variables (#required-environment-variables)
 Status: updated
-Commit: 7f4d602
-Updated: 2026-08-14T12:50:02+00:00
-Summary: app/rag/embeddings.py: The environment variable for Google API token is no longer needed and a new variable for Hugging Face API token is already present but the description should be updated to reflect its new usage for embeddings
+Commit: db57fb3
+Updated: 2026-08-16T20:01:48+00:00
+Summary: app/rag/llm.py: `GOOGLE_API_TOKEN` is no longer required for LLM calls after switching to HuggingFace
 
 ## Stack (#stack)
 Status: updated
-Commit: 7f4d602
-Updated: 2026-08-14T12:50:02+00:00
-Summary: app/rag/embeddings.py: The embeddings layer is now using Hugging Face instead of Google Generative AI
+Commit: db57fb3
+Updated: 2026-08-16T20:01:48+00:00
+Summary: app/rag/llm.py: LLM entry still lists `gemini-2.5-flash` via Google Generative AI despite the code now using HuggingFace
 
